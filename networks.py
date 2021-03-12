@@ -77,3 +77,24 @@ def get_shared_network(cls, net='dnn', num_steps = 1, input_dim = 0):
         elif net == 'cnn':
             return CNN.get_network_head(
                 Input((1, num_steps, input_dim)))
+
+class DNN(Network):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        with graph.as_default():
+            if sess is not None:
+                set_session(sess)
+            inp = None
+            output = None
+            if self.shared_network is None:
+                inp = Input((self.input_dim,))
+                output = self.get_network_head(inp).output
+            else:
+                inp = self.shared_network.input
+                output = self.shared_network.output
+            output = Dense(
+                self.output_dim, activation = self.activation,
+                kernel_initializer = 'random_normal')(output)
+            self.model = Model(inp, output)
+            self.model.compile(
+                optimizer = SGD(lr=self.lr), loss = self.loss)
