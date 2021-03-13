@@ -19,7 +19,7 @@ if os.environ['KERAS_BACKEND'] == 'tensorflow':
     from tensorflow.keras.optimizers import SGD
     from tensorflow.keras.backend import set_session
     import tensorflow as tf
-    graph = tf.get_default_graph()
+    graph = tf.compat.v1.get_default_graph()
     sess = tf.compat.v1.Session()
 elif os.environ['KERAS_BACKEND'] == 'plaidml.keras.backend':
     from keras.models import Model
