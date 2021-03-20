@@ -20,6 +20,8 @@ if os.environ['KERAS_BACKEND'] == 'tensorflow':
     from tensorflow.python.keras.backend import set_session
     import tensorflow as tf
     graph = tf.compat.v1.get_default_graph()
+    config = tf.compat.v1.ConfigProto()
+    config.gpu_options.allow_growth = True
     sess = tf.compat.v1.Session()
 elif os.environ['KERAS_BACKEND'] == 'plaidml.keras.backend':
     from keras.models import Model
