@@ -22,7 +22,8 @@ if os.environ['KERAS_BACKEND'] == 'tensorflow':
     graph = tf.compat.v1.get_default_graph()
     config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
-    sess = tf.compat.v1.Session()
+    tf.compat.v1.disable_eager_execution()
+    sess = tf.compat.v1.Session(config= config)
 elif os.environ['KERAS_BACKEND'] == 'plaidml.keras.backend':
     from keras.models import Model
     from keras.layers import Input, Dense, LSTM, Conv2D, \
@@ -107,11 +108,16 @@ class DNN(Network):
                        kernel_initializer='random_normal')(inp)
         output = BatchNormalization()(output)
         output = Dropout(0.1)(output)
+        output = Dense(128, activation='sigmoid',
+                       kernel_initializer='random_normal')(output)
         output= Dense(64, activation='sigmoid',
                       kernel_initializer='random_normal')(output)
         output = BatchNormalization()(output)
-        output = Dropout(0,1)(output)
-        return  Model(inp, output)
+        output = Dropout(0.1)(output)
+        output = Dense(32, activation='sigmoid', kernel_initializer='random_normal')(output)
+        output = BatchNormalization()(output)
+        output = Dropout(0.1)(output)
+        return Model(inp, output)
 
     def train_on_batch(self, x, y):
         x = np.array(x).reshape((-1, self.input_dim))
@@ -203,6 +209,7 @@ class CNN(Network):
                     kernel_initializer='random_normal')(output)
         output = BatchNormalization()(output)
         output = MaxPooling2D(pool_size=(1, 2))(output)
+        output = Dropout(0.1)(output)
         output = Conv2D(32, kernel_size=(1, 5),
                     padding='same', activation='sigmoid',
                     kernel_initializer='random_normal')(output)
