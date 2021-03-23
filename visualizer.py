@@ -103,6 +103,8 @@ class Visualizer:
                 initial_balance, linestyle='-', color = 'gray')
             self.axes[4].fill_between(x, pvs, pvs_base,
                 where=pvs > pvs_base, facecolor = 'r', alpha = 0.1)
+            self.axes[4].fill_between(x, pvs, pvs_base,
+                                      where=pvs < pvs_base, facecolor = 'b', alpha = 0.1)
             self.axes[4].plot(x, pvs, '-k')
             # 학습 위치 표시
             for learning_idx in learning_idxes:

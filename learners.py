@@ -104,7 +104,7 @@ class ReinforcementLearner:
                 model_path=self.value_network_path)
 
     def init_policy_network(self, shared_network = None,
-                            activation = 'sigmoid', loss = 'mse'):
+                            activation = 'sigmoid', loss = 'binary_crossentropy'):
         if self.net == 'dnn':
             self.policy_network = DNN(
                 input_dim=self.num_features,
@@ -184,7 +184,8 @@ class ReinforcementLearner:
             return loss
         return None
 
-    def fit(self, delayed_reward, discount_factor):
+    def fit(self, delayed_reward, discount_factor, full = False):
+        batch_size = len(self.memory_reward) if full else self.batch_size
         # 배치 학습 데이터 생성 및 신경망 갱신
         if self.batch_size > 0:
             _loss = self.update_network(
@@ -278,6 +279,7 @@ class ReinforcementLearner:
                 self.agent.reset_exploration()
             else:
                 epsilon = start_epsilon
+                self.agent.reset_exploration()
             while True:
                 # 샘플 생성
                 next_sample = self.build_sample()
@@ -327,12 +329,12 @@ class ReinforcementLearner:
                 self.exploration_cnt += 1 if exploration else 0
 
                 # 지연 보상 발생된 경우 미니 배치 학습
-                if learning and (delayed_reward == 0):
+                if learning and (delayed_reward != 0):
                     self.fit(delayed_reward, discount_factor)
 
             # 에포크 종료 후 학습
             if learning:
-                self.fit(self.agent.profitloss, discount_factor)
+                self.fit(self.agent.profitloss, discount_factor, full= True)
 
             # 에포크 관련 정보 로그 기록
             num_epoches_digit = len(str(num_epoches))
@@ -543,7 +545,7 @@ class A3CLearner(ReinforcementLearner):
         threads = []
         for learner in self.learners:
             threads.append(threading.Thread(
-                target=learner.fit, daemon=True, kwargs={
+                target=learner.run, daemon=True, kwargs={
                     'num_epoches': num_epoches, 'balance': balance,
                     'discount_factor':discount_factor,
                     'start_epsilon':start_epsilon,
