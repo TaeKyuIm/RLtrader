@@ -1,13 +1,13 @@
 import pandas as pd
 import numpy as np
 
-COLUMNS_CHART_DATA = ['data', 'open', 'high', 'low', 'close', 'volume']
+COLUMNS_CHART_DATA = ['date', 'open', 'high', 'low', 'close', 'volume']
 
 COLUMNS_TRAINING_DATA_V1 = [
     'open_lastclose_ratio', 'high_close_ratio', 'low_close_ratio',
     'close_lastclose_ratio', 'volume_lastvolume_ratio',
     'close_ma5_ratio', 'volume_ma5_ratio',
-    'clase_ma10_ratio', 'volume_ma10_ratio',
+    'close_ma10_ratio', 'volume_ma10_ratio',
     'close_ma20_ratio', 'volume_ma20_ratio',
     'close_ma60_ratio', 'volume_ma60_ratio',
     'close_ma120_ratio', 'volume_ma120_ratio',
@@ -17,7 +17,7 @@ COLUMNS_TRAINING_DATA_V1_RICH = [
     'open_lastclose_ratio', 'high_close_ratio', 'low_close_ratio',
     'close_lastclose_ratio', 'volume_lastvolume_ratio',
     'close_ma5_ratio', 'volume_ma5_ratio',
-    'clase_ma10_ratio', 'volume_ma10_ratio',
+    'close_ma10_ratio', 'volume_ma10_ratio',
     'close_ma20_ratio', 'volume_ma20_ratio',
     'close_ma60_ratio', 'volume_ma60_ratio',
     'close_ma120_ratio', 'volume_ma120_ratio',
@@ -34,7 +34,7 @@ COLUMNS_TRAINING_DATA_V2 = [
     'open_lastclose_ratio', 'high_close_ratio', 'low_close_ratio',
     'close_lastclose_ratio', 'volume_lastvolume_ratio',
     'close_ma5_ratio', 'volume_ma5_ratio',
-    'clase_ma10_ratio', 'volume_ma10_ratio',
+    'close_ma10_ratio', 'volume_ma10_ratio',
     'close_ma20_ratio', 'volume_ma20_ratio',
     'close_ma60_ratio', 'volume_ma60_ratio',
     'close_ma120_ratio', 'volume_ma120_ratio',
@@ -112,7 +112,7 @@ def preprocess(data, ver='v1'):
 def load_data(fpath, date_from, date_to, ver='v2'):
     header = None if ver == 'v1' else 0
     data = pd.read_csv(fpath, thousands=',', header=header,
-        converters={'date': lambda x: str(x)})
+                       converters={'date': lambda x: str(x)})
 
     if ver == 'v1':
         data.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
@@ -139,7 +139,7 @@ def load_data(fpath, date_from, date_to, ver='v2'):
         training_data = data[COLUMNS_TRAINING_DATA_V1_RICH]
     elif ver == 'v2':
         data.loc[:, ['per', 'pbr', 'roe']] = \
-            data[['per', 'pbr', 'roe']].apply(lambda x: x/ 100)
+            data[['per', 'pbr', 'roe']].apply(lambda x: x / 100)
         training_data = data[COLUMNS_TRAINING_DATA_V2]
         training_data = training_data.apply(np.tanh)
     else:

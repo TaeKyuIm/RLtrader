@@ -128,7 +128,7 @@ class Visualizer:
             self.axes[1].set_ylabel('Agent')
             self.axes[2].set_ylabel('V')
             self.axes[3].set_ylabel('P')
-            self.axes[4].set_yalbel('PV')
+            self.axes[4].set_ylabel('PV')
             for ax in _axes:
                 ax.set_xlim(xlim) # x축 limit 재설정
                 ax.get_xaxis().get_major_formatter().set_scientific(False)
