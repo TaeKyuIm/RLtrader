@@ -111,7 +111,7 @@ class Visualizer:
                 self.axes[4].axvline(learning_idx, color = 'y')
 
             # 에포크 및 탐험 비율
-            self.fig.subtitle('{} \nEpoch:{}/{} e = {:.2f}'.format(
+            self.fig.suptitle('{} \nEpoch:{}/{} e = {:.2f}'.format(
                 self.title, epoch_str, num_epoches, epsilon))
             # 캔버스 레이아웃 조정
             self.fig.tight_layout()
