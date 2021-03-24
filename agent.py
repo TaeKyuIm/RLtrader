@@ -51,7 +51,7 @@ class Agent:
         self.balance = self.initial_balance
         self.num_stocks = 0
         self.portfolio_value = self.initial_balance
-        self.base_profitloss_value = self.initial_balance
+        self.base_portfolio_value = self.initial_balance
         self.num_buy = 0
         self.num_sell = 0
         self.num_hold = 0

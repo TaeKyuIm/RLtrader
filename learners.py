@@ -43,7 +43,7 @@ class ReinforcementLearner:
         # 학습 데이터
         self.training_data = training_data
         self.sample = None
-        self.training_data.idx = -1
+        self.training_data_idx = -1
         # 벡터 크기 = 학습 데이터 벡터 크기 + 에이전트 상태 크기
         self.num_features = self.agent.STATE_DIM
         if self.training_data is not None:
@@ -131,7 +131,7 @@ class ReinforcementLearner:
 
     def reset(self):
         self.sample = None
-        self.training_data.idx = -1
+        self.training_data_idx = -1
         # 환경 초기화
         self.environment.reset()
         # 에이전트 초기화
